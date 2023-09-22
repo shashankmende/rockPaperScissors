@@ -76,14 +76,27 @@ class App extends Component {
     }))
   }
 
-  updateGameResult = () => {
-    this.setState(prevState => ({
-      gameResultView: !prevState.gameResultView,
-    }))
+  updateGameResult = text => {
+    if (text === 'YOU WON') {
+      this.setState(prevState => ({
+        gameResultView: !prevState.gameResultView,
+        score: prevState.score + 1,
+      }))
+    } else if (text === 'YOU LOSE') {
+      this.setState(prevState => ({
+        gameResultView: !prevState.gameResultView,
+        score: prevState.score - 1,
+      }))
+    } else {
+      this.setState(prevState => ({
+        gameResultView: !prevState.gameResultView,
+        score: prevState.score,
+      }))
+    }
   }
 
   render() {
-    const {gameResultView, randomNumber, btnDetails} = this.state
+    const {gameResultView, randomNumber, btnDetails, score} = this.state
 
     console.log('randome number', GenerateRandomNumber())
 
@@ -97,7 +110,7 @@ class App extends Component {
           </TextContainer>
           <ScoreContainer>
             <ScoreText>Score</ScoreText>
-            <ScoreText>1</ScoreText>
+            <ScoreText>{score}</ScoreText>
           </ScoreContainer>
         </TopContainer>
         {gameResultView ? (
@@ -107,7 +120,7 @@ class App extends Component {
                 <Button data-testid="rockButton" onClick={this.onClickRockBtn}>
                   <BtnImg
                     src="https://assets.ccbp.in/frontend/react-js/rock-paper-scissor/rock-image.png"
-                    alt="rockButton"
+                    alt={choicesList[0].id}
                   />
                 </Button>
                 <Button
@@ -116,7 +129,7 @@ class App extends Component {
                 >
                   <BtnImg
                     src="https://assets.ccbp.in/frontend/react-js/rock-paper-scissor/scissor-image.png"
-                    alt="scissorsButton"
+                    alt={choicesList[1].id}
                   />
                 </Button>
               </ScissorAndRockContainer>
@@ -127,13 +140,13 @@ class App extends Component {
                 >
                   <BtnImg
                     src="https://assets.ccbp.in/frontend/react-js/rock-paper-scissor/paper-image.png"
-                    alt="paperButton"
+                    alt={choicesList[2].id}
                   />
                 </Button>
               </PaperContainer>
             </BottomContainer>
             <PopupContainer>
-              <Popup modal trigger={<ScoreText>Rules</ScoreText>}>
+              <Popup modal trigger={<Button>Rules</Button>}>
                 {close => (
                   <RulesContainer>
                     <CloseBtn>

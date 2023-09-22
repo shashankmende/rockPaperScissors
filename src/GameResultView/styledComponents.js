@@ -37,3 +37,8 @@ export const PlayAgainBtn = styled.button`
   cursor: pointer;
   outline: none;
 `
+
+export const ResultText = styled.p`
+  color: #ffffff;
+  font-family: 'Roboto';
+`

@@ -26,7 +26,7 @@ export const TextContainer = styled.div`
   flex-direction: column;
   align-items: flex-start;
 `
-export const Heading = styled.p`
+export const Heading = styled.h1`
   color: #ffffff;
   font-family: 'Bree Serif';
 `
@@ -42,7 +42,7 @@ export const ScoreContainer = styled.div`
 
 export const ScoreText = styled.p`
   color: #223a5f;
-  font-family: 'Bree Serif';
+  font-family: 'Roboto';
 `
 
 export const BottomContainer = styled.div`
