@@ -39,46 +39,29 @@ const choicesList = [
   },
 ]
 
-let gameText = ''
-
 const GenerateRandomNumber = () => {
   const number = Math.floor(Math.random() * 3)
   return number
 }
+let gameText = ''
 
 class App extends Component {
   state = {
     btnDetails: choicesList[0],
     gameResultView: true,
     score: 0,
-    gameResultText: '',
     randomNumber: choicesList[GenerateRandomNumber()],
-  }
-
-  updatingScoreFunction = result => {
-    let {score} = this.state
-    switch (result) {
-      case 'YOU WON':
-        score += 1
-        return score
-      case 'YOU LOSE':
-        score -= 1
-        return score
-      case 'IT IS DRAW':
-        return score
-
-      default:
-        return null
-    }
   }
 
   callRockFunction = () => {
     const {randomNumber} = this.state
     if (randomNumber.id === 'PAPER') {
       gameText = 'YOU LOSE'
+
       return gameText
     }
     gameText = 'YOU WON'
+
     return gameText
   }
 
@@ -86,8 +69,10 @@ class App extends Component {
     const {randomNumber} = this.state
     if (randomNumber.id === 'ROCK') {
       gameText = 'YOU WON'
+
       return gameText
     }
+
     gameText = 'YOU LOSE'
     return gameText
   }
@@ -98,13 +83,13 @@ class App extends Component {
       gameText = 'YOU LOSE'
       return gameText
     }
+
     gameText = 'YOU WON'
     return gameText
   }
 
-  resultTextFunction = () => {
+  GameResultTextFunction = () => {
     const {btnDetails, randomNumber} = this.state
-
     switch (btnDetails.id) {
       case randomNumber.id:
         return 'IT IS DRAW'
@@ -122,46 +107,15 @@ class App extends Component {
     }
   }
 
-  onClickRockBtn = () => {
-    const updatedScore = this.updatingScoreFunction(this.resultTextFunction())
-    this.setState(prevState => ({
-      gameResultView: !prevState.gameResultView,
-      score: updatedScore,
-      btnDetails: choicesList[0],
-      randomNumber: choicesList[GenerateRandomNumber()],
-      gameResultText: this.resultTextFunction(),
-    }))
-  }
+  updatingScoreFunction = () => {
+    const updatedScore = this.GameResultTextFunction()
 
-  onClickPaperButton = () => {
-    const updatedScore = this.updatingScoreFunction(this.resultTextFunction())
-    this.setState(prevState => ({
-      gameResultView: !prevState.gameResultView,
-      score: updatedScore,
-      btnDetails: choicesList[2],
-      gameResultText: this.resultTextFunction(),
-      randomNumber: choicesList[GenerateRandomNumber()],
-    }))
-  }
-
-  onClickScissorBtn = () => {
-    const updatedScore = this.updatingScoreFunction(this.resultTextFunction())
-    this.setState(prevState => ({
-      gameResultView: !prevState.gameResultView,
-      score: updatedScore,
-      btnDetails: choicesList[1],
-      randomNumber: choicesList[GenerateRandomNumber()],
-      gameResultText: this.resultTextFunction(),
-    }))
-  }
-
-  updateGameResult = text => {
-    if (text === 'YOU WON') {
+    if (updatedScore === 'YOU WON') {
       this.setState(prevState => ({
         gameResultView: !prevState.gameResultView,
         score: prevState.score + 1,
       }))
-    } else if (text === 'YOU LOSE') {
+    } else if (updatedScore === 'YOU LOSE') {
       this.setState(prevState => ({
         gameResultView: !prevState.gameResultView,
         score: prevState.score - 1,
@@ -174,24 +128,91 @@ class App extends Component {
     }
   }
 
-  render() {
-    const {
-      gameResultView,
-      randomNumber,
-      btnDetails,
-      score,
-      gameResultText,
-    } = this.state
+  onClickRockBtn = () => {
+    const updatedScore = this.GameResultTextFunction()
+    if (updatedScore === 'YOU WON') {
+      this.setState(prevState => ({
+        gameResultView: !prevState.gameResultView,
+        score: prevState.score + 1,
+        btnDetails: choicesList[0],
+      }))
+    } else if (updatedScore === 'YOU LOSE') {
+      this.setState(prevState => ({
+        gameResultView: !prevState.gameResultView,
+        score: prevState.score - 1,
+        btnDetails: choicesList[0],
+      }))
+    } else if (updatedScore === 'IT IS DRAW') {
+      this.setState(prevState => ({
+        gameResultView: !prevState.gameResultView,
+        score: prevState.score,
+        btnDetails: choicesList[0],
+      }))
+    }
+  }
 
-    console.log('randome number', GenerateRandomNumber())
+  onClickPaperButton = () => {
+    const updatedScore = this.GameResultTextFunction()
+    if (updatedScore === 'YOU WON') {
+      this.setState(prevState => ({
+        gameResultView: !prevState.gameResultView,
+        score: prevState.score + 1,
+        btnDetails: choicesList[2],
+      }))
+    } else if (updatedScore === 'YOU LOSE') {
+      this.setState(prevState => ({
+        gameResultView: !prevState.gameResultView,
+        score: prevState.score - 1,
+        btnDetails: choicesList[2],
+      }))
+    } else {
+      this.setState(prevState => ({
+        gameResultView: !prevState.gameResultView,
+        score: prevState.score,
+        btnDetails: choicesList[2],
+      }))
+    }
+  }
+
+  onClickScissorBtn = () => {
+    const updatedScore = this.GameResultTextFunction()
+    if (updatedScore === 'YOU WON') {
+      this.setState(prevState => ({
+        gameResultView: !prevState.gameResultView,
+        score: prevState.score + 1,
+        btnDetails: choicesList[1],
+      }))
+    } else if (updatedScore === 'YOU LOSE') {
+      this.setState(prevState => ({
+        gameResultView: !prevState.gameResultView,
+        score: prevState.score - 1,
+        btnDetails: choicesList[1],
+      }))
+    } else {
+      this.setState(prevState => ({
+        gameResultView: !prevState.gameResultView,
+        score: prevState.score,
+        btnDetails: choicesList[1],
+      }))
+    }
+  }
+
+  updateGameResult = () => {
+    this.setState(prevState => ({
+      gameResultView: !prevState.gameResultView,
+      btnDetails: choicesList[1],
+      randomNumber: choicesList[GenerateRandomNumber()],
+    }))
+  }
+
+  render() {
+    const {gameResultView, randomNumber, btnDetails, score} = this.state
 
     return (
       <RockPaperScissors>
         <TopContainer>
           <TextContainer>
-            <Heading>ROCK</Heading>
-            <Heading>PAPER</Heading>
-            <Heading>SCISSORS</Heading>
+            <Heading>ROCK PAPER SCISSORS</Heading>
           </TextContainer>
           <ScoreContainer>
             <ScoreText>Score</ScoreText>
@@ -251,7 +272,6 @@ class App extends Component {
             updateGameResult={this.updateGameResult}
             randomNumber={randomNumber}
             btnDetails={btnDetails}
-            gameResultText={gameResultText}
           />
         )}
       </RockPaperScissors>
